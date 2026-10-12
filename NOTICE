@@ -1,0 +1,35 @@
+xxseryixx.github.io
+Copyright (C) 2026 XxSeRyIxX <https://steamcommunity.com/id/xxseryixx/>
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along
+with this program. If not, see <https://www.gnu.org/licenses/>.
+
+Source code: https://github.com/XxSeRyIxX/xxseryixx.github.io
+
+---
+
+The licence above covers everything in this repository.
+
+The published page also shows content that the build fetches from Steam and
+GitHub: names, avatars, profile backgrounds, avatar frames, badges, emoticons,
+profile text and statistics. That content belongs to its respective owners,
+such as Valve Corporation, GitHub, Inc. and the publishers of the games
+involved. It is NOT part of this repository and NOT covered by the GNU AGPL
+above.
+
+Steam data is provided "as is", without warranty of any kind and without
+liability for any damages arising from its use, as the Steam Web API Terms of
+Use require: https://steamcommunity.com/dev/apiterms
+
+Steam and the Steam logo are trademarks and/or registered trademarks of Valve
+Corporation. GitHub is a trademark of GitHub, Inc. This project is not
+affiliated with, endorsed by, or connected to Valve or GitHub.

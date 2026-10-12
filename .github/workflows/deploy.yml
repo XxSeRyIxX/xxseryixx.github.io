@@ -1,0 +1,46 @@
+name: Deploy profile
+
+on:
+  push:
+    branches: [master]
+  schedule:
+    - cron: '0 0 * * 1'
+      timezone: Europe/Madrid
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # Single-CPU container runner: starts fast and ships Node 24, so no setup-node step.
+    runs-on: ubuntu-slim
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - id: pages
+        uses: actions/configure-pages@v6
+      - name: Build site with fresh GitHub and Steam data
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
+          PREVIOUS_PROFILE_URL: ${{ steps.pages.outputs.base_url }}/profile.json
+        run: |
+          mkdir _site
+          cp index.html _site/
+          node scripts/build-profile.mjs _site/profile.json
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v5

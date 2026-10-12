@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XxSeRyIxX</title>
+  <meta name="description" content="XxSeRyIxX: featured projects, Steam level, achievements and completed games.">
+  <meta name="theme-color" content="#07070c">
+  <link rel="icon" href="https://avatars.githubusercontent.com/u/9020359?v=4&amp;s=64">
+  <style>
+    :root {
+      color-scheme: dark;
+      --neon: #f13292;
+      --violet: #9501a9;
+      --cyan: #3ad1ff;
+      --theme: #ddbed2;
+      --text: #969696;
+      --label: #ebebeb;
+      --panel: rgb(0 0 0 / 45%);
+      --glow:
+        0 0 2px #fff, inset 0 0 2px #fff,
+        0 0 3px 2px var(--neon), inset 0 0 10px 1px var(--neon),
+        0 0 3px var(--neon), inset 0 0 4px var(--neon);
+      --hex: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    }
+
+    [hidden] { display: none !important; }
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #07070c;
+      color: var(--text);
+      font: 14px/1.5 "Motiva Sans", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    }
+
+    a { color: var(--label); text-decoration: none; }
+    a:hover { color: var(--cyan); }
+    :focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .sprites { position: absolute; }
+    .icon { flex: none; width: 14px; height: 14px; }
+
+    .ambient {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      background:
+        radial-gradient(60rem 40rem at 15% -10%, rgb(241 50 146 / 22%), transparent 60%),
+        radial-gradient(50rem 40rem at 100% 30%, rgb(58 120 255 / 14%), transparent 60%),
+        #07070c;
+    }
+    .ambient img { width: 100%; height: 100%; object-fit: cover; opacity: .45; filter: blur(28px) saturate(1.4) brightness(.6); transform: scale(1.15); }
+
+    .page { max-width: 1100px; margin: 0 auto; padding: 24px 14px 40px; }
+
+    .hero { position: relative; overflow: hidden; border-radius: 4px; background: var(--panel); }
+    .hero::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: var(--glow); pointer-events: none; }
+    .cover { position: relative; height: clamp(150px, 30vw, 320px); background: linear-gradient(135deg, #3a0c3f, #0b0816 60%, #07070c); }
+    .cover img, .cover video { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 35%, rgb(0 0 0 / 88%)); }
+
+    .identity { position: relative; display: grid; justify-items: center; gap: 14px; margin-top: -64px; padding: 0 20px; text-align: center; }
+    .avatar { position: relative; width: 128px; aspect-ratio: 1; }
+    .avatar-img { display: block; width: 100%; height: 100%; background: #000; box-shadow: 0 0 0 2px #000, 0 0 22px rgb(241 50 146 / 65%); image-rendering: pixelated; }
+    .avatar-frame { position: absolute; top: -11%; left: -11%; width: 122%; height: 122%; pointer-events: none; }
+    h1 { margin: 0; color: #fff; font-size: clamp(30px, 6vw, 42px); font-weight: 300; line-height: 1.1; overflow-wrap: anywhere; text-shadow: 0 0 14px rgb(241 50 146 / 75%), 0 2px 4px #000; }
+    .real-name { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 14px; margin: 8px 0 0; color: var(--theme); word-break: keep-all; overflow-wrap: anywhere; }
+    .place { display: inline-flex; align-items: center; gap: 6px; color: var(--label); }
+    .since { margin: 4px 0 0; font-size: 13px; }
+
+    .rank { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 14px 20px; }
+    .level { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 22px; font-weight: 300; }
+    .hex-glow { filter: drop-shadow(0 0 6px var(--neon)); }
+    .hex { display: grid; place-items: center; width: 46px; height: 52px; padding: 2px; clip-path: var(--hex); background: linear-gradient(160deg, #fff, var(--neon) 45%, var(--violet)); }
+    .hex span { display: grid; place-items: center; width: 100%; height: 100%; clip-path: var(--hex); background: #170a1d; color: #fff; font-size: 17px; }
+    .fav { display: flex; align-items: center; gap: 12px; padding: 8px 16px 8px 8px; border-radius: 3px; background: var(--panel); box-shadow: var(--glow); text-align: left; }
+    .fav img { width: 54px; height: 54px; }
+    .fav-name { display: block; color: #fff; }
+    .fav-xp { font-size: 13px; }
+
+    .summary { margin: 22px 20px 0; color: var(--theme); text-align: center; }
+    .summary p { margin: 0; line-height: 1.9; word-break: keep-all; overflow-wrap: anywhere; }
+    .summary b { font-weight: 600; }
+    .emoticon { width: 18px; height: 18px; vertical-align: -4px; }
+
+    .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 22px 20px 24px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 0 16px; border-radius: 2px; background: rgb(255 255 255 / 10%); color: #fff; line-height: 34px; }
+    .btn:hover { background: rgb(255 255 255 / 20%); color: #fff; }
+    .btn-neon { background: linear-gradient(90deg, rgb(241 50 146 / 90%), rgb(149 1 169 / 90%)); box-shadow: 0 0 12px rgb(241 50 146 / 55%); }
+    .btn-neon:hover { background: linear-gradient(90deg, var(--neon), var(--violet)); }
+    .btn-play { background: linear-gradient(90deg, #75b022 5%, #588a1b 95%); color: #d2efa9; }
+    .btn-play:hover { background: linear-gradient(90deg, #8ed629 5%, #6aa621 95%); }
+
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 24px 0; padding: 0; list-style: none; }
+    .stats a, .stats div { display: flex; flex-direction: column; height: 100%; padding: 12px 14px; border-radius: 3px; background: var(--panel); box-shadow: inset 0 0 0 1px rgb(241 50 146 / 30%); color: var(--label); transition: box-shadow .2s; }
+    .stats a:hover { box-shadow: var(--glow); }
+    .stat-source { color: var(--neon); font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+    .stat-value { color: #fff; font-size: 26px; font-weight: 300; line-height: 1.2; }
+    .stat-label { font-size: 13px; }
+
+    .panel { border-radius: 3px; background: var(--panel); }
+    .panel-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px 16px;
+      padding: 10px 16px;
+      border-radius: 3px;
+      background: linear-gradient(90deg, rgb(87 89 123 / 0%), rgb(149 1 169 / 19%) 90%);
+      box-shadow: var(--glow);
+    }
+    .panel-head h2 { margin: 0; color: var(--theme); font-size: 20px; font-weight: 300; }
+    .chip { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
+    .chip img { width: 22px; height: 22px; border-radius: 50%; }
+    #status { margin: 0; padding: 16px; }
+    #status:empty { display: none; }
+
+    .projects { display: grid; gap: 18px; margin: 0; padding: 18px 16px; list-style: none; }
+    .project { display: flex; flex-direction: column; overflow: hidden; border-radius: 3px; background: rgb(0 0 0 / 40%); transition: transform .2s, box-shadow .2s; }
+    .project:hover, .project:focus-within { transform: translateY(-4px); box-shadow: 0 0 3px 1px var(--neon), 0 0 18px rgb(241 50 146 / 45%); }
+    .capsule {
+      position: relative;
+      display: grid;
+      place-items: center;
+      aspect-ratio: 460 / 215;
+      padding: 16px;
+      overflow: hidden;
+      container-type: inline-size;
+      background:
+        repeating-linear-gradient(transparent 0 3px, rgb(0 0 0 / 22%) 3px 4px),
+        linear-gradient(transparent 50%, rgb(0 0 0 / 55%)),
+        repeating-linear-gradient(90deg, rgb(255 255 255 / 6%) 0 1px, transparent 1px 28px),
+        radial-gradient(110% 85% at 85% 125%, color-mix(in srgb, var(--accent) 75%, transparent), transparent 60%),
+        radial-gradient(90% 70% at 8% -20%, rgb(241 50 146 / 60%), transparent 60%),
+        linear-gradient(160deg, #1d0d2e, #07060d);
+      color: #fff;
+    }
+    .capsule:hover { color: #fff; }
+    .capsule-title {
+      margin: 0;
+      font-size: clamp(16px, 9cqi, 34px);
+      font-weight: 800;
+      line-height: 1.05;
+      text-align: center;
+      text-transform: uppercase;
+      overflow-wrap: anywhere;
+      text-shadow: 0 0 6px var(--accent), 0 0 20px var(--accent), 0 2px 3px #000;
+      transition: transform .3s;
+    }
+    .project:hover .capsule-title { transform: scale(1.06); }
+    .tag { position: absolute; top: 10px; left: 10px; padding: 1px 8px; border-radius: 2px; background: var(--neon); box-shadow: 0 0 10px var(--neon); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .project-body { display: flex; flex: 1; flex-direction: column; gap: 10px; padding: 14px 16px 16px; }
+    .description { margin: 0; }
+    .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin: auto 0 0; font-size: 12px; }
+    .meta span { display: inline-flex; align-items: center; gap: 5px; }
+    .swatch { width: 10px; height: 10px; border-radius: 50%; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    footer { margin-top: 32px; font-size: 12px; text-align: center; }
+    footer p { margin: 4px 0; }
+    #updated:empty { display: none; }
+
+    @media (min-width: 760px) {
+      .stats { grid-template-columns: none; grid-auto-columns: 1fr; grid-auto-flow: column; }
+      .projects { grid-template-columns: repeat(2, 1fr); }
+      /* With an odd number of projects, the first one spans the row as a featured card. */
+      .project:first-child:nth-last-child(odd) { grid-column: 1 / -1; flex-direction: row; }
+      .project:first-child:nth-last-child(odd) > * { flex: 1 1 50%; }
+    }
+
+    @media (min-width: 900px) {
+      .page { padding: 32px 24px 48px; }
+      .identity { grid-template-columns: auto 1fr auto; justify-items: start; align-items: end; gap: 28px; margin-top: -92px; padding: 0 32px; text-align: left; }
+      .avatar { width: 184px; }
+      .real-name { justify-content: flex-start; }
+      .rank { justify-content: flex-end; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+  <script type="module">
+    const LANGUAGE_COLORS = {
+      'C#': '#178600', CSS: '#663399', GDScript: '#355570', Groovy: '#4298b8', HTML: '#e34c26', Java: '#b07219',
+      JavaScript: '#f1e05a', Kotlin: '#a97bff', Python: '#3572a5', Shell: '#89e051', TypeScript: '#3178c6',
+    };
+    const ACCENTS = ['#f13292', '#3ad1ff', '#9b5cff', '#ff9a3d'];
+    const FALLBACK_AVATAR = 'https://avatars.githubusercontent.com/u/9020359?v=4&s=368';
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const shortDate = new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short', year: 'numeric' });
+    const relative = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+    const $ = (id) => document.getElementById(id);
+
+    function el(tag, className, ...children) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      node.append(...children);
+      return node;
+    }
+
+    function link(href, ...children) {
+      if (!href) return el('span', null, ...children);
+      const anchor = el('a', null, ...children);
+      anchor.href = href;
+      return anchor;
+    }
+
+    function image(src, className) {
+      const node = el('img', className);
+      node.src = src;
+      node.alt = '';
+      node.decoding = 'async';
+      return node;
+    }
+
+    function icon(name) {
+      const svg = document.createElementNS(SVG_NS, 'svg');
+      svg.setAttribute('class', 'icon');
+      svg.setAttribute('aria-hidden', 'true');
+      const use = document.createElementNS(SVG_NS, 'use');
+      use.setAttribute('href', `#i-${name}`);
+      svg.append(use);
+      return svg;
+    }
+
+    function counter(name, count, noun) {
+      return el('span', null, icon(name), String(count), el('span', 'sr-only', ` ${noun}${count === 1 ? '' : 's'}`));
+    }
+
+    // Website fields are free text: only link http(s) URLs.
+    function httpUrl(value, assumeHttps = false) {
+      if (!value) return null;
+      try {
+        const url = new URL(assumeHttps && !value.includes('://') ? `https://${value}` : value);
+        return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : null;
+      } catch {
+        return null;
+      }
+    }
+
+    // Images and videos may only come from GitHub's and Steam's CDNs.
+    function mediaUrl(value) {
+      const href = httpUrl(value);
+      if (!href) return null;
+      const { protocol, hostname } = new URL(href);
+      return protocol === 'https:' && (hostname === 'avatars.githubusercontent.com' || hostname.endsWith('.steamstatic.com')) ? href : null;
+    }
+
+    function sized(avatar, size) {
+      const url = new URL(avatar);
+      url.searchParams.set('s', size);
+      return url.href;
+    }
+
+    function timeAgo(date) {
+      const seconds = (date - Date.now()) / 1000;
+      for (const [unit, size] of [['year', 31536000], ['month', 2592000], ['day', 86400], ['hour', 3600], ['minute', 60]]) {
+        if (Math.abs(seconds) >= size) return relative.format(Math.round(seconds / size), unit);
+      }
+      return 'just now';
+    }
+
+    function stat(source, label, value, url, tooltip) {
+      const content = [el('span', 'stat-source', source), el('span', 'stat-value', value), el('span', 'stat-label', label)];
+      const href = httpUrl(url);
+      const tile = href ? link(href, ...content) : el('div', null, ...content);
+      if (tooltip) tile.title = tooltip;
+      return el('li', null, tile);
+    }
+
+    function summaryParts(parts) {
+      return parts.flatMap((part) => {
+        if (part.emoticon) {
+          const src = mediaUrl(part.emoticon);
+          return src ? [image(src, 'emoticon')] : [];
+        }
+        if (part.link) return [link(httpUrl(part.link), ...summaryParts(part.parts ?? []))];
+        return [part.bold ? el('b', null, part.text ?? '') : part.text ?? ''];
+      });
+    }
+
+    function project(repo, index) {
+      const url = httpUrl(repo.url);
+      const accent = LANGUAGE_COLORS[repo.language] ?? ACCENTS[index % ACCENTS.length];
+      const capsule = link(url, el('h3', 'capsule-title', repo.name.split(/[-_.]+/).join(' ')));
+      capsule.className = 'capsule';
+      capsule.style.setProperty('--accent', accent);
+      if (repo.pinned) capsule.append(el('span', 'tag', 'Pinned'));
+
+      const body = el('div', 'project-body');
+      if (repo.description) body.append(el('p', 'description', repo.description));
+
+      const meta = el('p', 'meta');
+      if (repo.language) {
+        const swatch = el('span', 'swatch');
+        swatch.style.background = accent;
+        meta.append(el('span', null, swatch, repo.language));
+      }
+      if (repo.stars) meta.append(counter('star', repo.stars, 'star'));
+      if (repo.forks) meta.append(counter('fork', repo.forks, 'fork'));
+      if (repo.pushedAt) meta.append(el('span', null, `Updated ${shortDate.format(new Date(repo.pushedAt))}`));
+
+      const actions = el('div', 'actions');
+      const homepage = httpUrl(repo.homepage, true);
+      if (homepage) {
+        const launch = link(homepage, icon('play'), 'Launch');
+        launch.className = 'btn btn-play';
+        actions.append(launch);
+      }
+      const code = link(url, 'View code');
+      code.className = 'btn';
+      actions.append(code);
+
+      body.append(meta, actions);
+      return el('li', 'project', capsule, body);
+    }
+
+    function renderGitHub(github) {
+      $('name').textContent = github.name || github.login;
+      const profile = httpUrl(github.url);
+      if (profile) $('github').href = $('github-chip').href = profile;
+      const avatar = mediaUrl(github.avatar);
+      if (avatar) $('avatar').src = sized(avatar, 368);
+      $('github-chip').replaceChildren(...(avatar ? [image(sized(avatar, 44), '')] : []), `@${github.login}`);
+      if (github.bio) {
+        $('summary').replaceChildren(el('p', null, github.bio));
+        $('summary').hidden = false;
+      }
+
+      $('projects').replaceChildren(...github.projects.map(project));
+      return [
+        stat('GitHub', 'Repositories', github.publicRepos.toLocaleString('en'), profile && `${profile}?tab=repositories`),
+        stat('GitHub', 'Followers', github.followers.toLocaleString('en'), profile && `${profile}?tab=followers`),
+      ];
+    }
+
+    function renderCover(steam) {
+      const poster = mediaUrl(steam.backgroundVideo?.poster) ?? mediaUrl(steam.background);
+      const sources = [['webm', steam.backgroundVideo?.webm], ['mp4', steam.backgroundVideo?.mp4]]
+        .map(([type, src]) => [type, mediaUrl(src)])
+        .filter(([, src]) => src);
+      if (sources.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const video = el('video');
+        Object.assign(video, { muted: true, defaultMuted: true, autoplay: true, loop: true, playsInline: true });
+        if (poster) video.poster = poster;
+        for (const [type, src] of sources) {
+          const source = el('source');
+          source.type = `video/${type}`;
+          source.src = src;
+          video.append(source);
+        }
+        $('cover').replaceChildren(video);
+      } else if (poster) {
+        $('cover').replaceChildren(image(poster, ''));
+      }
+      if (poster) $('ambient').replaceChildren(image(poster, ''));
+    }
+
+    function renderSteam(steam) {
+      if (steam.persona) $('name').textContent = steam.persona;
+      const profile = httpUrl(steam.url);
+      if (profile) $('steam').href = profile;
+      const avatar = mediaUrl(steam.avatar);
+      if (avatar) $('avatar').src = avatar;
+      const frame = mediaUrl(steam.avatarFrame);
+      if (frame) {
+        $('frame').src = frame;
+        $('frame').hidden = false;
+      }
+      renderCover(steam);
+
+      const realName = [];
+      if (steam.realName) realName.push(el('span', null, steam.realName));
+      if (steam.location) {
+        const flag = mediaUrl(steam.flag);
+        realName.push(el('span', 'place', ...(flag ? [image(flag, '')] : []), steam.location));
+      }
+      $('real-name').replaceChildren(...realName);
+      $('real-name').hidden = !realName.length;
+      if (steam.memberSince) {
+        $('since').textContent = `On Steam since ${steam.memberSince}`;
+        $('since').hidden = false;
+      }
+      if (steam.summary?.length) {
+        $('summary').replaceChildren(...steam.summary.map((parts) => el('p', null, ...summaryParts(parts))));
+        $('summary').hidden = false;
+      }
+
+      if (Number.isFinite(steam.level)) {
+        $('level').textContent = steam.level;
+        if (profile) $('level-link').href = `${profile}badges/`;
+        $('level-link').hidden = false;
+      }
+      const badge = steam.favoriteBadge;
+      const badgeIcon = mediaUrl(badge?.icon);
+      if (badgeIcon) {
+        $('fav-icon').src = badgeIcon;
+        $('fav-name').textContent = badge.name;
+        $('fav-xp').textContent = `${badge.xp} XP`;
+        $('fav').title = badge.description ?? '';
+        if (profile) $('fav').href = `${profile}badges/`;
+        $('fav').hidden = false;
+      }
+      $('rank').hidden = $('level-link').hidden && $('fav').hidden;
+
+      return (steam.stats ?? []).map((item) => stat('Steam', item.label, item.value, item.url, item.tooltip));
+    }
+
+    const status = $('status');
+    status.textContent = 'Loading…';
+    try {
+      const response = await fetch('profile.json', { cache: 'no-cache' });
+      if (!response.ok) throw new Error(`profile.json: HTTP ${response.status}`);
+      const data = await response.json();
+      const githubStats = renderGitHub(data.github);
+      const steamStats = data.steam ? renderSteam(data.steam) : [];
+      $('stats').replaceChildren(...steamStats, ...githubStats);
+      document.title = $('name').textContent;
+      $('updated').textContent = `Synced with Steam and GitHub ${timeAgo(new Date(data.generatedAt))}.`;
+      const source = httpUrl(data.source);
+      if (source) $('source').href = source;
+      status.textContent = data.github.projects.length ? '' : 'No featured projects yet.';
+    } catch (error) {
+      console.error(error);
+      $('avatar').src = FALLBACK_AVATAR;
+      status.replaceChildren("The profile data isn't available right now. Try again later, or visit ", link($('github').href, 'GitHub'), ' or ', link($('steam').href, 'Steam'), '.');
+    }
+  </script>
+</head>
+<body>
+  <div id="ambient" class="ambient" aria-hidden="true"></div>
+  <svg class="sprites" width="0" height="0" aria-hidden="true">
+    <symbol id="i-star" viewBox="0 0 16 16"><path fill="currentColor" d="M8 .5 9.8 5.5 15.1 5.7 11 9 12.4 14.1 8 11.1 3.6 14.1 5 9 .9 5.7 6.2 5.5Z"/></symbol>
+    <symbol id="i-fork" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="4" cy="3" r="1.75"/><circle cx="12" cy="3" r="1.75"/><circle cx="8" cy="13" r="1.75"/><path d="M4 4.75V6a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V4.75M8 8v3.25"/></g></symbol>
+    <symbol id="i-play" viewBox="0 0 16 16"><path fill="currentColor" d="M4 2.5v11l9.5-5.5Z"/></symbol>
+  </svg>
+
+  <div class="page">
+    <header class="hero">
+      <div id="cover" class="cover"></div>
+      <div class="identity">
+        <div class="avatar">
+          <img id="avatar" class="avatar-img" alt="" width="184" height="184">
+          <img id="frame" class="avatar-frame" alt="" hidden>
+        </div>
+        <div>
+          <h1 id="name">XxSeRyIxX</h1>
+          <p id="real-name" class="real-name" hidden></p>
+          <p id="since" class="since" hidden></p>
+        </div>
+        <div id="rank" class="rank" hidden>
+          <a id="level-link" class="level" hidden>Level <span class="hex-glow"><span class="hex"><span id="level"></span></span></span></a>
+          <a id="fav" class="fav" hidden>
+            <img id="fav-icon" alt="">
+            <span><span id="fav-name" class="fav-name"></span><span id="fav-xp" class="fav-xp"></span></span>
+          </a>
+        </div>
+      </div>
+      <div id="summary" class="summary" hidden></div>
+      <nav class="links" aria-label="Profiles">
+        <a id="steam" class="btn btn-neon" href="https://steamcommunity.com/id/xxseryixx/">Steam profile</a>
+        <a id="github" class="btn" href="https://github.com/XxSeRyIxX">GitHub</a>
+      </nav>
+    </header>
+
+    <ul id="stats" class="stats" aria-label="Stats"></ul>
+
+    <main>
+      <section class="panel" aria-labelledby="projects-title">
+        <div class="panel-head">
+          <h2 id="projects-title">Featured Projects</h2>
+          <a id="github-chip" class="chip" href="https://github.com/XxSeRyIxX"></a>
+        </div>
+        <p id="status" role="status"></p>
+        <ul id="projects" class="projects"></ul>
+      </section>
+    </main>
+
+    <footer>
+      <p id="updated"></p>
+      <p>Not affiliated with Valve or GitHub. Steam data is shown as is, without warranty. <a id="source" href="https://github.com/XxSeRyIxX/xxseryixx.github.io">Source code</a> (GNU AGPL v3)</p>
+    </footer>
+  </div>
+</body>
+</html>
