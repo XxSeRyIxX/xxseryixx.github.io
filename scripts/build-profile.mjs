@@ -1,5 +1,6 @@
 // Builds profile.json for the site from the public GitHub and Steam profiles in profile.config.json.
 import { readFile, writeFile } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
 
 const config = JSON.parse(await readFile(new URL('../profile.config.json', import.meta.url), 'utf8'));
 const output = process.argv[2] ?? 'profile.json';
@@ -277,6 +278,48 @@ async function loadSteam() {
   };
 }
 
+const escapeXml = (text) => String(text).replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
+
+// The GitHub profile README can show images but can't run code, so the stats go there as an SVG.
+function statsCard(steam, date) {
+  const tiles = [...(Number.isFinite(steam.level) ? [{ label: 'Level', value: String(steam.level) }] : []), ...steam.stats];
+  const [width, height, gap] = [840, 152, 12];
+  const tileWidth = (width - 48 - gap * (tiles.length - 1)) / tiles.length;
+  const updated = new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Europe/Madrid' }).format(date);
+  const title = `${steam.persona} on Steam: ${tiles.map((tile) => `${tile.value} ${tile.label}`).join(', ')}`;
+  const cells = tiles.map((tile, index) => `
+  <g transform="translate(${(24 + index * (tileWidth + gap)).toFixed(1)} 56)">
+    <rect width="${tileWidth.toFixed(1)}" height="72" rx="3" fill="#000" fill-opacity=".45" stroke="#f13292" stroke-opacity=".35"/>
+    <text x="14" y="38" class="value">${escapeXml(tile.value)}</text>
+    <text x="14" y="59" class="label">${escapeXml(tile.label)}</text>
+  </g>`).join('');
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="title">
+  <title id="title">${escapeXml(title)}</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a0f3a"/><stop offset=".6" stop-color="#0b0816"/><stop offset="1" stop-color="#07070c"/>
+    </linearGradient>
+    <filter id="glow" x="-10%" y="-30%" width="120%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>
+  </defs>
+  <style>
+    text { font-family: 'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif; }
+    .name { fill: #fff; font-size: 22px; font-weight: 300; }
+    .name-glow { fill: #f13292; font-size: 22px; font-weight: 300; }
+    .on { fill: #ddbed2; font-size: 15px; }
+    .date { fill: #969696; font-size: 12px; }
+    .value { fill: #fff; font-size: 28px; font-weight: 300; }
+    .label { fill: #ebebeb; font-size: 13px; }
+  </style>
+  <rect x="5" y="5" width="${width - 10}" height="${height - 10}" rx="4" fill="url(#bg)"/>
+  <rect x="5" y="5" width="${width - 10}" height="${height - 10}" rx="4" fill="none" stroke="#f13292" stroke-width="3" filter="url(#glow)"/>
+  <rect x="5.5" y="5.5" width="${width - 11}" height="${height - 11}" rx="4" fill="none" stroke="#fff" stroke-opacity=".55"/>
+  <text x="24" y="40" class="name-glow" filter="url(#glow)">${escapeXml(steam.persona)}</text>
+  <text x="24" y="40"><tspan class="name">${escapeXml(steam.persona)}</tspan><tspan class="on" dx="10">on Steam</tspan></text>
+  <text x="${width - 24}" y="40" class="date" text-anchor="end">Updated ${updated}</text>${cells}
+</svg>
+`;
+}
+
 async function loadPrevious() {
   const url = process.env.PREVIOUS_PROFILE_URL;
   if (!url) return null;
@@ -295,5 +338,7 @@ const steam = await loadSteam().catch((error) => {
   return previous?.steam ?? null;
 });
 const source = process.env.GITHUB_REPOSITORY ? `https://github.com/${process.env.GITHUB_REPOSITORY}` : null;
-await writeFile(output, `${JSON.stringify({ generatedAt: new Date().toISOString(), source, github: githubData, steam }, null, 2)}\n`);
-console.log(`Wrote ${output}: ${githubData.projects.length} projects, Steam ${steam ? 'included' : 'missing'}.`);
+const generatedAt = new Date();
+await writeFile(output, `${JSON.stringify({ generatedAt: generatedAt.toISOString(), source, github: githubData, steam }, null, 2)}\n`);
+if (steam) await writeFile(join(dirname(output), 'card.svg'), statsCard(steam, generatedAt));
+console.log(`Wrote ${output}: ${githubData.projects.length} projects, Steam ${steam ? 'included, with card.svg' : 'missing'}.`);

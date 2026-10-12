@@ -14,7 +14,8 @@ achievements and completed games, plus the GitHub projects I want to show.
 - [scripts/build-profile.mjs](scripts/build-profile.mjs) writes `profile.json`
   from the GitHub API, the public Steam profile and, with a key, the Steam Web
   API. If Steam can't be reached, it keeps the previous Steam data. If GitHub
-  can't, the run fails and the last published page stays up.
+  can't, the run fails and the last published page stays up. It also writes
+  `card.svg`, the Steam stats card on my GitHub profile.
 - [.github/workflows/deploy.yml](.github/workflows/deploy.yml) runs the script
   and publishes the page to GitHub Pages on every push, every Monday at 00:00
   Madrid time, and from **Run workflow** in the Actions tab.
