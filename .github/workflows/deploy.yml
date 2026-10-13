@@ -37,10 +37,11 @@ jobs:
           PREVIOUS_PROFILE_URL: ${{ steps.pages.outputs.base_url }}/profile.json
         run: |
           mkdir _site
-          cp index.html _site/
+          cp -r index.html .well-known _site/
           node scripts/build-profile.mjs _site/profile.json
       - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
+          include-hidden-files: true
       - id: deployment
         uses: actions/deploy-pages@v5

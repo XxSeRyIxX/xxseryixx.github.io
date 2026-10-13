@@ -11,6 +11,8 @@ achievements and completed games, plus the GitHub projects I want to show.
 
 - [index.html](index.html) is the whole site: one static page, with no framework
   or dependencies, that draws itself from `profile.json`.
+- [.well-known/microsoft-identity-association.json](.well-known/microsoft-identity-association.json)
+  verifies this domain as the publisher of mail-cleaner's Microsoft sign-in.
 - [scripts/build-profile.mjs](scripts/build-profile.mjs) writes `profile.json`
   from the GitHub API, the public Steam profile and, with a key, the Steam Web
   API. If Steam can't be reached, it keeps the previous Steam data. If GitHub
